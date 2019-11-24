@@ -1,6 +1,6 @@
 # ytcomments
 
-> It is my first deployed Vue&Nuxt site. It is a Single page application with SSR. These code contains async json fetch, paginations and other codes. You can reach this site on socialazy.com
+> It is my first deployed Vue&Nuxt site. It is a Single page application with SSR. These codes contains async json fetch, paginations and other functionalities. You can reach this site on socialazy.com
 
 ## Build Setup
 
