@@ -60,14 +60,7 @@
       </v-row>
     </v-container>
 
-    <v-lazy 
-        v-model="isActive"
-        :options="{
-          threshold: .4
-        }"
-        transition="fade-transition"
-        min-height="200"
-    >
+  
       <v-list three-line>
        
         
@@ -100,7 +93,6 @@
         </template>
        
         </v-list>
-     </v-lazy>
     </div>
 </template>
 
@@ -108,7 +100,6 @@
 export default {
     data: () => ({
       refresh: false,
-      isActive: false,
       loading:false,
       ms: 5000
     }),
