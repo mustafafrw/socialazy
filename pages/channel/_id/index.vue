@@ -61,7 +61,10 @@
     </v-container>
 
   
-      <v-list three-line>
+      <v-list 
+        two-line
+        expand
+        >
        
         
         <template v-for="(item, index) in data">
