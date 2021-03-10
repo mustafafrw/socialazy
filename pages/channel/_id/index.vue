@@ -20,29 +20,58 @@
                 <v-card-subtitle v-if="!topinfo.statistics.hiddenSubscriberCount" v-text="subscriberText(topinfo.statistics.subscriberCount)+' subscribers'"></v-card-subtitle>
 
                 <v-card-actions>
-                  <v-btn
-                    v-if="!loading"
-                    class="ml-2 mt-3"
-                    fab
-                    icon
-                    height="40px"
-                    right
-                    width="40px"
-                    @click="refresh=!refresh"
-                  >
-                    <v-icon>mdi-{{ `${refresh ? 'pause' : 'play'}` }}</v-icon>
-                  </v-btn>
-                  <div
-                    v-else
-                    class="text-center"
-                  >
-                    <v-progress-circular
-                      class="ml-2 mt-3"
-                      right
-                      indeterminate
-                      color="white"
-                    ></v-progress-circular>
-                  </div>
+                  <v-tooltip  v-if="!loading" top>
+                  <template v-slot:activator="{ on, attrs }" >
+                      <v-btn
+                        class="ml-2 mt-3"
+                        fab
+                        icon
+                        height="40px"
+                        right
+                        width="40px"
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="refresh=!refresh"
+                      >
+                        <v-icon>mdi-{{ `${refresh ? 'pause' : 'play'}` }}</v-icon>
+                      </v-btn>
+                      
+                    </template>
+                    
+                    <span>Auto Refresh</span>
+                  </v-tooltip>
+                    <div
+                        v-else
+                        class="text-center"
+                      >
+                        <v-progress-circular
+                          class="ml-2 mt-3"
+                          right
+                          indeterminate
+                          color="white"
+                        ></v-progress-circular>
+                      </div>
+
+                  <v-tooltip top>
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                        class="ml-2 mt-3"
+                        fab
+                        icon
+                        height="40px"
+                        right
+                        width="40px"
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="searchdialog= true"
+                      >
+                        <v-icon>mdi-magnify</v-icon>
+                      </v-btn>
+                    </template>
+                    
+                    <span>Search comments</span>
+                  </v-tooltip>
+
                 </v-card-actions>
               </div>
 
@@ -96,15 +125,29 @@
         </template>
        
         </v-list>
+
+        <SearchTerm 
+          v-if="searchdialog"
+          :id= "$route.params.id"
+          @close="searchdialog= false"
+        />
     </div>
 </template>
 
 <script>
+import SearchTerm from "@/components/Dialogs/SearchTerm"
 export default {
+    components:{
+      SearchTerm
+    },
     data: () => ({
       refresh: false,
-      loading:false,
-      ms: 5000
+      loading: false,
+      searchdialog: false,
+      ms: 20000,
+      title: null,
+      description: null,
+      descEnd: " - Socialazy.com, Live Comments on YouTube"
     }),
     computed: {
       data () {
@@ -113,7 +156,10 @@ export default {
       topinfo () {
         let topinfo = this.$store.state.topinfo
         if(topinfo){
-          return topinfo[0]
+          let top = topinfo[0];
+          this.title = top.snippet.title;
+          this.description = top.snippet.title + this.descEnd;
+          return top;
         }
         return null
       }
@@ -149,6 +195,15 @@ export default {
     },
     mounted(){
       this.refreshComments()
+    },
+    head () {
+      return {
+        title: this.title,
+        meta: [
+          // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+          { hid: 'description', name: 'description', content: this.description }
+        ]
+      }
     }
 
 }

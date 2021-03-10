@@ -7,8 +7,8 @@ export default {
   },
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - socialazy',
-    title: 'socialazy',
+    titleTemplate: '%s - Socialazy.com',
+    title: 'Socialazy - Live Comments on YouTube',
     htmlAttrs: {
       lang: 'en'
     },
