@@ -55,7 +55,7 @@ export default {
   data(){
     return{
       title: "Privacy Policy",
-      description: "Privacy Policy | Socialazy.com, Live Comments on YouTube"
+      description: "Privacy Policy | Socialazy.com, Search Comments on YouTube"
     }
   },
   head () {

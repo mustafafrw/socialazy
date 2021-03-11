@@ -150,7 +150,7 @@ export default {
       searchdialog: false,
       title: null,
       description: null,
-      descEnd: " - Socialazy.com, Live Comments on YouTube"
+      descEnd: " - Socialazy.com, Search Comments on YouTube"
     }),
     computed: {
       data () {

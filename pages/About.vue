@@ -36,7 +36,7 @@ export default {
   data(){
     return{
       title: "About",
-      description: "About | Socialazy.com, Live Comments on YouTube"
+      description: "About | Socialazy.com, Search Comments on YouTube"
     }
   },
   head () {

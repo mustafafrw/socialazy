@@ -79,7 +79,7 @@ export default {
   data(){
     return{
       title: "Terms of Service",
-      description: "Terms of Service | Socialazy.com, Live Comments on YouTube"
+      description: "Terms of Service | Socialazy.com, Search Comments on YouTube"
     }
   },
   head () {
