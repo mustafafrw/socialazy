@@ -105,7 +105,7 @@
             <v-divider
             v-if="index>0"
             :key="index"
-            inset="true"
+            inset
             ></v-divider>
 
             <v-list-item
