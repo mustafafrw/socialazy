@@ -1,6 +1,7 @@
 <template>
     <div>
-      <v-container>
+      <v-container fluid>
+
       <v-row dense>
         <v-col
           cols="12"
@@ -31,14 +32,13 @@
                         width="40px"
                         v-bind="attrs"
                         v-on="on"
-                        @click="refresh=!refresh"
+                        @click="refreshComments()"
                       >
-                        <v-icon>mdi-{{ `${refresh ? 'pause' : 'play'}` }}</v-icon>
+                        <v-icon>mdi-refresh</v-icon>
                       </v-btn>
                       
                     </template>
-                    
-                    <span>Auto Refresh</span>
+                    <span>Refresh Comments</span>
                   </v-tooltip>
                     <div
                         v-else
@@ -91,11 +91,9 @@
 
   
       <v-list 
-        two-line
-        expand
+      subheader
+      three-line 
         >
-       
-        
         <template v-for="(item, index) in data">
             <!-- <v-subheader
             v-if="item.header"
@@ -107,7 +105,7 @@
             <v-divider
             v-if="index>0"
             :key="index"
-            :inset="true"
+            inset="true"
             ></v-divider>
 
             <v-list-item
@@ -116,11 +114,18 @@
             <v-list-item-avatar>
                 <v-img :src="item.snippet.topLevelComment.snippet.authorProfileImageUrl"></v-img>
             </v-list-item-avatar>
-
             <v-list-item-content>
                 <v-list-item-title v-html="item.snippet.topLevelComment.snippet.authorDisplayName"></v-list-item-title>
-                <v-list-item-subtitle v-html="item.snippet.topLevelComment.snippet.textDisplay"></v-list-item-subtitle>
+                <v-card-text class="ma-0 pa-0" v-html="item.snippet.topLevelComment.snippet.textDisplay"></v-card-text>
+
+                <div class="mt-2 pb-0 mb-0">
+                  <v-icon x-small>mdi-thumb-up</v-icon>
+                    <div class="text-subtitle-2 text-no-wrap text-center d-inline-block">{{item.snippet.topLevelComment.snippet.likeCount}}</div>
+                  <v-icon x-small class="ml-1">mdi-message-reply</v-icon>
+                    <div class="text-subtitle-2 text-no-wrap text-center d-inline-block">{{item.snippet.totalReplyCount}}</div>
+                </div>
             </v-list-item-content>
+              
             </v-list-item>
         </template>
        
@@ -141,10 +146,8 @@ export default {
       SearchTerm
     },
     data: () => ({
-      refresh: false,
       loading: false,
       searchdialog: false,
-      ms: 20000,
       title: null,
       description: null,
       descEnd: " - Socialazy.com, Live Comments on YouTube"
@@ -170,17 +173,13 @@ export default {
     },
     methods:{
       async refreshComments(){
-          var th = this;
-          setInterval(() => {
-            if(th.refresh){
-              th.loading=true;
-              setTimeout(() => {
-                let id = th.$route.params.id;
-                th.$store.dispatch('setData',id);
-                th.loading=false;
-              }, 1000);
-            }
-          },this.ms)
+          var th= this;
+          th.loading= true;
+          setTimeout(() => {
+            let id= th.$route.params.id;
+            th.$store.dispatch('setData',id);
+            th.loading=false;
+          }, 1000);
       },
       subscriberText(count){
         if(count>1000000){
@@ -192,9 +191,6 @@ export default {
         else
           return count
       }
-    },
-    mounted(){
-      this.refreshComments()
     },
     head () {
       return {
