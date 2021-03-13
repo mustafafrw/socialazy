@@ -4,16 +4,18 @@
               class="ml-10"
             >
             <v-list-item-avatar>
-                <v-img :src="item.snippet.authorProfileImageUrl"></v-img>
+               <a 
+                  :href="'/channel/'+item.snippet.authorChannelId.value"
+                >
+                  <v-img :src="item.snippet.authorProfileImageUrl"></v-img>
+                </a>
             </v-list-item-avatar>
             <v-list-item-content>
                 <span>
-                <a class="text-decoration-none white--text" 
+                <a class="text-decoration-none white--text d-inline-block" 
                   :href="'/channel/'+item.snippet.authorChannelId.value">
                   <v-list-item-title 
-                    @click.prevent="$router.push('/channel/'+item.snippet.authorChannelId.value)"
                     >
-                   
                     {{item.snippet.authorDisplayName}}
                   </v-list-item-title>
                 </a>

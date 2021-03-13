@@ -3,16 +3,21 @@
               :key="item.etag"
             >
             <v-list-item-avatar>
-                <v-img :src="item.snippet.topLevelComment.snippet.authorProfileImageUrl"></v-img>
+                <a 
+                  @click.prevent="$router.push('/channel/'+item.snippet.topLevelComment.snippet.authorChannelId.value)"
+                  :href="'/channel/'+item.snippet.topLevelComment.snippet.authorChannelId.value"
+                >
+                  <v-img :src="item.snippet.topLevelComment.snippet.authorProfileImageUrl"></v-img>
+                </a>
             </v-list-item-avatar>
             <v-list-item-content>
                 <span>
-                <a class="text-decoration-none white--text" 
-                  :href="'/channel/'+item.snippet.topLevelComment.snippet.authorChannelId.value">
+                <a class="text-decoration-none white--text d-inline-block" 
+                  :href="'/channel/'+item.snippet.topLevelComment.snippet.authorChannelId.value"
+                   @click.prevent="$router.push('/channel/'+item.snippet.topLevelComment.snippet.authorChannelId.value)"
+>
                   <v-list-item-title 
-                    @click.prevent="$router.push('/channel/'+item.snippet.topLevelComment.snippet.authorChannelId.value)"
                     >
-                   
                     {{item.snippet.topLevelComment.snippet.authorDisplayName}}
                   </v-list-item-title>
                 </a>
@@ -25,12 +30,14 @@
                         <div class="text-subtitle-2 text-no-wrap text-center d-inline-block">{{item.snippet.topLevelComment.snippet.likeCount}}</div>
                       </template>
                       <template>
-                        <v-icon x-small class="ml-1">mdi-message-reply</v-icon>
-                        <a 
-                          class="text-decoration-none white--text" 
-                          :href="'/comment/'+item.snippet.videoId+'/'+item.id">
-                          <div class="text-subtitle-2 text-no-wrap text-center d-inline-block">{{item.snippet.totalReplyCount}}</div>
-                        </a>
+                        <div class="d-inline-block">
+                          <a
+                            class="text-decoration-none white--text" 
+                            :href="'/comment/'+item.snippet.videoId+'/'+item.id">
+                            <v-icon x-small class="ml-1">mdi-message-reply</v-icon>
+                            <div class="text-subtitle-2 text-no-wrap text-center d-inline-block">{{item.snippet.totalReplyCount}}</div>
+                          </a>
+                        </div>
                       </template>
                 </div>
             </v-list-item-content>
