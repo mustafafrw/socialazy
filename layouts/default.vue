@@ -59,11 +59,17 @@
     >
       <span>Socialazy.com &copy; {{ new Date().getFullYear() }}</span>
     </v-footer>
+    <Snackbar />
   </v-app>
 </template>
 
 <script>
+import Snackbar from "@/components/Shared/Snackbar"
+
 export default {
+  components:{
+    Snackbar
+  },
   data () {
     return {
       clipped: false,

@@ -4,10 +4,18 @@ import axios from "axios"
 const createStore = () => {
   return new Vuex.Store({
     state:{
+        site: "https://socialazy.com",
         data: null,
         topinfo: null,
+        replies: null,
+        videoinfo: null,
         searchresult: null,
-        key: "AIzaSyDhuIGeH4xmjvncDrgIFsbxGlGfFkCj3uY"
+        searchdialog: false,
+        key: "AIzaSyDhuIGeH4xmjvncDrgIFsbxGlGfFkCj3uY",
+        snackbar:{
+            show:false,
+            message:""
+        }
     },
     mutations:{
         setData(state,data){
@@ -18,7 +26,30 @@ const createStore = () => {
         },
         setSearchResult(state,data){
             state.searchresult = data;
-        }
+        },
+        setSearchDialog(state){
+            state.searchdialog = !state.searchdialog
+        },
+        setVideoInfo(state,data){
+            state.videoinfo = data
+        },
+        setReplies(state,data){
+            state.replies = data
+        },
+        closeSnackbar(state){
+            state.snackbar.show = false
+        },
+        showSnackbar(state,message){
+            let timeout =0
+            if(state.snackbar.show){
+              state.snackbar.show=false
+              timeout=200
+            }
+            setTimeout(() => {
+              state.snackbar.show = true
+              state.snackbar.message = message
+            }, timeout);
+        },
     },
     actions:{
         async setData(state,id){
@@ -52,7 +83,6 @@ const createStore = () => {
         },
         async setTopInfo(state,id){
             state.commit("setTopInfo", "");
-            //console.log("id - "+id);
             await axios.get("https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id="+id+"&key="+state.state.key)
             .then(response => {
                 let data = response.data;
@@ -66,19 +96,44 @@ const createStore = () => {
         },
         async setSearchResult(state,query){
             state.commit("setSearchResult", "");
-            //console.log("id - "+id);
             await axios.get("https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&type=channel&q="+query+"&key="+state.state.key)
             .then(response => {
                 let data = response.data;
                 if(data.items){
                     state.commit("setSearchResult", data.items)
-                    //console.log(data.items)
                 }
             }).catch(error => {
                 console.log(error)
             });
         },
-        
+        async setVideoInfo(state,id){
+            state.commit("setVideoInfo", "");
+            console.log(id)
+            await axios.get("https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2Cstatistics&id="+id+"&key="+state.state.key)
+            .then(response => {
+                let data = response.data;
+                if(data.items){
+                    state.commit("setVideoInfo", data.items)
+                }
+            }).catch(error => {
+                console.log(error)
+            });
+        },
+        async setReplies(state,id){
+            state.commit("setReplies", "");
+            await axios.get("https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&id="+id+"&key="+state.state.key)
+            .then(response => {
+                let data = response.data;
+                if(data.items){
+                    state.commit("setData", data.items)
+                    if(data.items[0].replies.comments){
+                        state.commit("setReplies", data.items[0].replies.comments)
+                    }
+                }
+            }).catch(error => {
+                console.log(error)
+            });
+        },
     },
     getters:{
         getData(state){
