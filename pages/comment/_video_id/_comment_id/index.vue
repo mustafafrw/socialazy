@@ -19,13 +19,17 @@ import ListReplies from "@/components/Main/ListReplies"
 import ListComments from "@/components/Main/ListComments"
 
 export default {
+    data(){
+      return {
+        title: null,
+        description: null,
+        image: null
+      }
+    },
     components:{
         VideoInformation,
         ListReplies,
         ListComments
-    },
-    mounted(){
-        console.log(this.$route)
     },
     async asyncData ({ store, params }) {
         await store.dispatch('setVideoInfo',params.video_id);
@@ -43,11 +47,28 @@ export default {
         
         if(videoinfo){
           let info = videoinfo[0];
-          //this.title = top.snippet.title;
-          //this.description = top.snippet.title + this.descEnd;
+          this.title = info.snippet.title;
+          this.image = info.snippet.thumbnails.medium.url
+
+          if(this.comment){
+            this.description = this.comment[0].snippet.topLevelComment.snippet.textOriginal
+        
+          }
           return info;
         }
         return null
+      }
+    },
+    head () {
+      return {
+        title: this.title,
+        meta: [
+          // hid is used as unique identifier. Do not use `vmid` for it as it will not work
+          { hid: 'description', name: 'description', content: this.description },
+          { property: 'og:title', content: this.title },
+          { property: 'og:description', content: this.description },
+          { property: 'og:image', content: this.image }
+        ]
       }
     }
 }

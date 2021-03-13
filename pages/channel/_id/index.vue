@@ -27,6 +27,7 @@ export default {
     data: () => ({
       title: null,
       description: null,
+      image: null,
       descEnd: " - Socialazy.com, Search Comments on YouTube"
     }),
     computed: {
@@ -39,6 +40,7 @@ export default {
           let top = topinfo[0];
           this.title = top.snippet.title;
           this.description = top.snippet.title + this.descEnd;
+          this.image = top.snippet.thumbnails.medium.url
           return top;
         }
         return null
@@ -53,7 +55,10 @@ export default {
         title: this.title,
         meta: [
           // hid is used as unique identifier. Do not use `vmid` for it as it will not work
-          { hid: 'description', name: 'description', content: this.description }
+          { hid: 'description', name: 'description', content: this.description },
+          { property: 'og:title', content: this.title },
+          { property: 'og:description', content: this.description },
+          { property: 'og:image', content: this.image }
         ]
       }
     }
