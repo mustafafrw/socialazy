@@ -126,7 +126,7 @@ const createStore = () => {
                 let data = response.data;
                 if(data.items){
                     state.commit("setData", data.items)
-                    if(data.items[0].replies.comments){
+                    if(data.items[0].replies){
                         state.commit("setReplies", data.items[0].replies.comments)
                     }
                 }

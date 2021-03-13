@@ -57,6 +57,9 @@ export default {
           return info;
         }
         return null
+      },
+      url(){
+        return this.$store.state.site+"/comment/"+this.$route.params.video_id+"/"+this.$route.params.comment_id
       }
     },
     head () {
@@ -67,7 +70,10 @@ export default {
           { hid: 'description', name: 'description', content: this.description },
           { property: 'og:title', content: this.title },
           { property: 'og:description', content: this.description },
-          { property: 'og:image', content: this.image }
+          { property: 'og:image', content: this.image },
+          { property: 'og:url', content: this.url },
+          { property: 'twitter:card', content: 'summary' },
+          { property: 'twitter:site', content: '@socialazyeu' },
         ]
       }
     }

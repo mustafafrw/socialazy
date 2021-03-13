@@ -44,6 +44,9 @@ export default {
           return top;
         }
         return null
+      },
+      url(){
+        return this.$store.state.site+"/channel/"+this.$route.params.id
       }
     },
     async asyncData ({ store, params }) {
@@ -58,7 +61,10 @@ export default {
           { hid: 'description', name: 'description', content: this.description },
           { property: 'og:title', content: this.title },
           { property: 'og:description', content: this.description },
-          { property: 'og:image', content: this.image }
+          { property: 'og:image', content: this.image },
+          { property: 'og:url', content: this.url },
+          { property: 'twitter:card', content: 'summary' },
+          { property: 'twitter:site', content: '@socialazyeu' },
         ]
       }
     }
