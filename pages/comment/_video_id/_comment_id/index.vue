@@ -23,7 +23,8 @@ export default {
       return {
         title: null,
         description: null,
-        image: null
+        image: null,
+        authorname: null
       }
     },
     components:{
@@ -52,7 +53,8 @@ export default {
 
           if(this.comment){
             this.description = this.comment[0].snippet.topLevelComment.snippet.textOriginal
-        
+            this.authorname = this.comment[0].snippet.topLevelComment.snippet.authorDisplayName
+            this.title = "Comment from "+this.authorname+" on YouTube - "+info.snippet.title
           }
           return info;
         }

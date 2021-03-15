@@ -56,7 +56,7 @@ const createStore = () => {
             state.commit("setData", "");
             //console.log("id - "+id);
             
-            await axios.get("https://youtube.googleapis.com/youtube/v3/commentThreads?part=id%2Creplies%2Csnippet&allThreadsRelatedToChannelId="+id+"&key="+state.state.key)
+            await axios.get("https://youtube.googleapis.com/youtube/v3/commentThreads?part=id%2Creplies%2Csnippet&order=relevance&allThreadsRelatedToChannelId="+id+"&key="+state.state.key)
             .then(response => {
                 let data = response.data;
                 if(data.items){
