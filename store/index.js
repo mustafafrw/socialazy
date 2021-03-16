@@ -81,6 +81,20 @@ const createStore = () => {
                 console.log(error)
             });
         },
+        async setDataWithVideoId(state,id){
+            state.commit("setData", "");
+            //console.log("id - "+id);
+            await axios.get("https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&order=relevance&videoId="+id+"&key="+state.state.key)
+            .then(response => {
+                let data = response.data;
+                if(data.items){
+                    state.commit("setData", data.items)
+                    //console.log(data.items)
+                }
+            }).catch(error => {
+                console.log(error)
+            });
+        },
         async setTopInfo(state,id){
             state.commit("setTopInfo", "");
             await axios.get("https://youtube.googleapis.com/youtube/v3/channels?part=snippet%2CcontentDetails%2Cstatistics&id="+id+"&key="+state.state.key)

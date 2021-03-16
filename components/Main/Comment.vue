@@ -22,7 +22,10 @@
                   </v-list-item-title>
                 </a>
                 </span>
-                <v-card-text class="ma-0 pa-0" v-html="item.snippet.topLevelComment.snippet.textDisplay"></v-card-text>
+                <v-card-text 
+                    class="ma-0 pa-0" 
+                    v-html="item.snippet.topLevelComment.snippet.textDisplay"
+                ></v-card-text>
                 
                 <div class="mt-2 pb-0 mb-0">
                       <template>
@@ -90,5 +93,7 @@ export default {
 </script>
 
 <style>
-
+  .v-card__text a {
+    color:white
+  }
 </style>

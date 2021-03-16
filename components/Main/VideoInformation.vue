@@ -15,11 +15,32 @@
                 <v-card-title
                   class="headline"
                   v-text="data.snippet.title"
-                ></v-card-title>
-
+                >
+                
+                </v-card-title>
+                
                 <v-card-subtitle v-text="viewText(data.statistics.viewCount)+' views'"></v-card-subtitle>
 
                 <v-card-actions>
+                  <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }" >
+                      <v-btn
+                        class="ml-2 mt-3"
+                        fab
+                        icon
+                        height="40px"
+                        right
+                        width="40px"
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="navigateToVideo()"
+                      >
+                        <v-icon>mdi-comment-text-multiple</v-icon>
+                      </v-btn>
+                      
+                    </template>
+                    <span>all comments in this video</span>
+                  </v-tooltip>
                 </v-card-actions>
               </div>
 
@@ -44,13 +65,19 @@ export default {
     methods:{
       viewText(count){
         if(count>1000000){
-          return count/1000000+'M'
+          return this.fix(count/1000000)+'M'
         }
         else if(count>1000){
-          return count/1000+'K'
+          return this.fix(count/1000)+'K'
         }
         else
           return count
+      },
+      fix(n){
+        return n.toFixed(2)
+      },
+      navigateToVideo(){
+        this.$router.push('/comment/'+this.$route.params.video_id)
       }
     },
 }
