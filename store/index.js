@@ -108,9 +108,9 @@ const createStore = () => {
                 console.log(error)
             });
         },
-        async setSearchResult(state,query){
+        async setSearchResult(state,payload){
             state.commit("setSearchResult", "");
-            await axios.get("https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&type=channel&q="+query+"&key="+state.state.key)
+            await axios.get("https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&type="+payload.type+"&q="+payload.query+"&key="+state.state.key)
             .then(response => {
                 let data = response.data;
                 if(data.items){

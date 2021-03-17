@@ -29,8 +29,16 @@
                 
                 <div class="mt-2 pb-0 mb-0">
                       <template>
-                        <v-icon x-small>mdi-thumb-up</v-icon>
-                        <div class="text-subtitle-2 text-no-wrap text-center d-inline-block">{{item.snippet.topLevelComment.snippet.likeCount}}</div>
+                        <div class="d-inline-block">
+                          <a
+                            class="text-decoration-none white--text" 
+                            :href="'https://www.youtube.com/watch?v='+item.snippet.videoId+'&lc='+item.id"
+                            target="_blank"
+                          >
+                            <v-icon x-small>mdi-thumb-up</v-icon>
+                            <div class="text-subtitle-2 text-no-wrap text-center d-inline-block">{{item.snippet.topLevelComment.snippet.likeCount}}</div>
+                         </a>
+                        </div>
                       </template>
                       <template>
                         <div class="d-inline-block">

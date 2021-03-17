@@ -71,6 +71,29 @@
                     <span>Search comments</span>
                   </v-tooltip>
 
+                  <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }" >
+                      <a 
+                        :href="'https://www.youtube.com/channel/'+topinfo.id"
+                        target="_blank"
+                        class="text-decoration-none"
+                      >
+                      <v-btn
+                        class="ml-2 mt-3"
+                        fab
+                        icon
+                        height="40px"
+                        right
+                        width="40px"
+                        v-bind="attrs"
+                        v-on="on"
+                      >
+                        <v-icon>mdi-youtube</v-icon>
+                      </v-btn>
+                      </a>
+                    </template>
+                    <span>watch on youtube</span>
+                  </v-tooltip>
                 </v-card-actions>
               </div>
 
