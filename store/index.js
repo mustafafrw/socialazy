@@ -172,7 +172,6 @@ const createStore = () => {
         },
         async setVideoInfo(state,id){
             state.commit("setVideoInfo", "");
-            console.log(id)
             await axios.get("https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2Cstatistics&id="+id+"&key="+state.state.key)
             .then(response => {
                 let data = response.data;

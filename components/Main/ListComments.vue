@@ -28,9 +28,6 @@ export default {
     components:{
         Comment,
     },
-    mounted(){
-      console.log(this.data)
-    }
 }
 </script>
 
