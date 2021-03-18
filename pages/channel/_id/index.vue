@@ -9,8 +9,12 @@
         <SearchTerm 
           v-if="$store.state.searchdialog"
           :id= "$route.params.id"
+          :type="'channel'"
           @close="$store.commit('setSearchDialog')"
         />
+        <div class="text-center">
+          <LoadMore />
+        </div>
     </div>
 </template>
 
@@ -18,11 +22,14 @@
 import SearchTerm from "@/components/Dialogs/SearchTerm"
 import ListComments from "@/components/Main/ListComments"
 import ChannelInformation from "@/components/Main/ChannelInformation"
+import LoadMore from "@/components/Main/LoadMore"
+
 export default {
     components:{
       SearchTerm,
       ListComments,
-      ChannelInformation
+      ChannelInformation,
+      LoadMore
     },
     data: () => ({
       title: null,

@@ -16,13 +16,15 @@
                   class="headline"
                   v-text="data.snippet.title"
                 >
-                
                 </v-card-title>
                 
                 <v-card-subtitle v-text="viewText(data.statistics.viewCount)+' views'"></v-card-subtitle>
 
                 <v-card-actions>
-                  <v-tooltip top>
+                  <v-tooltip 
+                    v-if="comments_video"
+                    top
+                  >
                   <template v-slot:activator="{ on, attrs }" >
                       <v-btn
                         class="ml-2 mt-3"
@@ -39,7 +41,50 @@
                       </v-btn>
                       
                     </template>
-                    <span>all comments in this video</span>
+                    <span>comments in this video</span>
+                  </v-tooltip>
+                  
+                  <v-tooltip top>
+                  <template v-slot:activator="{ on, attrs }" >
+                      <v-btn
+                        class="ml-2 mt-3"
+                        fab
+                        icon
+                        height="40px"
+                        right
+                        width="40px"
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="navigateToChannel()"
+                      >
+                        <v-icon>mdi-television-classic</v-icon>
+                      </v-btn>
+                      
+                    </template>
+                    <span>comments in this channel</span>
+                  </v-tooltip>
+
+                  <v-tooltip 
+                    v-if="search"
+                    top
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                        <v-btn
+                        class="ml-2 mt-3"
+                        fab
+                        icon
+                        height="40px"
+                        right
+                        width="40px"
+                        v-bind="attrs"
+                        v-on="on"
+                        @click="$store.commit('setSearchDialog')"
+                      >
+                        <v-icon>mdi-magnify</v-icon>
+                      </v-btn>
+                    </template>
+                    
+                    <span>search comments</span>
                   </v-tooltip>
 
                   <v-tooltip top>
@@ -67,7 +112,6 @@
                   </v-tooltip>
                 </v-card-actions>
               </div>
-
               <v-avatar
                 class="ma-3"
                 size="125"
@@ -85,10 +129,13 @@
 
 <script>
 export default {
-    props:["data"],
+    props:["data","search","comments_video"],
     methods:{
       viewText(count){
-        if(count>1000000){
+        if(count>1000000000){
+          return this.fix(count/1000000000)+'B'
+        }
+        else if(count>1000000){
           return this.fix(count/1000000)+'M'
         }
         else if(count>1000){
@@ -102,6 +149,9 @@ export default {
       },
       navigateToVideo(){
         this.$router.push('/comment/'+this.$route.params.video_id)
+      },
+      navigateToChannel(){
+        this.$router.push('/channel/'+this.data.snippet.channelId)
       }
     },
 }

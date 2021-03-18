@@ -1,17 +1,30 @@
 <template>
     <div>
-      <VideoInformation 
-          :data="videoinfo"
-      />
-      <ListComments
-          :data="comment"
-      />
+        <VideoInformation 
+            :data="videoinfo"
+            :search="true"
+            :comments_video="false"
+        />
+        <ListComments
+            :data="comment"
+        />
+        <SearchTerm 
+          v-if="$store.state.searchdialog"
+          :id= "$route.params.video_id"
+          :type="'video'"
+          @close="$store.commit('setSearchDialog')"
+        />
+        <div class="text-center">
+              <LoadMore />
+        </div>
     </div>
 </template>
 
 <script>
 import VideoInformation from "@/components/Main/VideoInformation"
 import ListComments from "@/components/Main/ListComments"
+import LoadMore from "@/components/Main/LoadMore"
+import SearchTerm from "@/components/Dialogs/SearchTerm"
 
 export default {
     data(){
@@ -25,7 +38,9 @@ export default {
     },
     components:{
         VideoInformation,
-        ListComments
+        ListComments,
+        LoadMore,
+        SearchTerm
     },
     async asyncData ({ store, params }) {
         await store.dispatch('setDataWithVideoId',params.video_id);

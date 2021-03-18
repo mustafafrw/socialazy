@@ -7,7 +7,6 @@
         <v-card-title class="headline">
           Search
           </v-card-title>
-
         <v-card-text>
           Search comments
           <v-text-field v-model="searchTerm"
@@ -41,7 +40,7 @@
 
 <script>
 export default {
-    props:["id"],
+    props:["id","type"],
     data(){
       return {
          searchTerm: null
@@ -50,12 +49,16 @@ export default {
     methods:{
         search(){
             if(!this.searchTermInvalid){
-                
               let payload= {
                   id: this.id,
                   term: this.searchTerm
               };
-              this.$store.dispatch("setDataWithTerm",payload);
+              if(this.type=="channel"){
+                this.$store.dispatch("setDataWithTerm_Channel",payload);
+              }
+              else if(this.type=="video"){
+                this.$store.dispatch("setDataWithTerm_Video",payload);
+              }
               this.$emit("close")
             }
         }

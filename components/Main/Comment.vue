@@ -100,7 +100,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
   .v-card__text a {
     color:white
   }

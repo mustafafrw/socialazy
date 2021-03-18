@@ -2,8 +2,8 @@
   <v-app dark>
     <v-navigation-drawer
       v-model="drawer"
-      :mini-variant="miniVariant"
       :clipped="clipped"
+      :mini-variant="true"
       fixed
       app
     >
@@ -30,18 +30,8 @@
       app
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer" />
-      <v-btn
-        icon
-        @click.stop="miniVariant = !miniVariant"
-      >
-        <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-      </v-btn>
-      <v-btn
-        icon
-        @click.stop="clipped = !clipped"
-      >
-        <v-icon>mdi-application</v-icon>
-      </v-btn>
+
+    
 
       <v-toolbar-title v-text="title" />
       <v-spacer />
@@ -72,9 +62,9 @@ export default {
   },
   data () {
     return {
-      clipped: false,
-      drawer: false,
-      fixed: false,
+      clipped: true,
+      drawer: true,
+      fixed: true,
       items: [
         {
           icon: 'mdi-magnify',
@@ -97,8 +87,6 @@ export default {
           to: '/termsofservice'
         }
       ],
-      miniVariant: false,
-      right: true,
       title: 'Socialazy'
     }
   }

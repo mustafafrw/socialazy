@@ -15,11 +15,21 @@ const createStore = () => {
         snackbar:{
             show:false,
             message:""
+        },
+        lastrequest: {
+            url: null,
+            nextPageToken: null,
+            type: null
         }
     },
     mutations:{
         setData(state,data){
             state.data = data;
+        },
+        addData(state,data){
+            data.forEach(element => {
+                state.data.push(element)
+            });
         },
         setTopInfo(state,data){
             state.topinfo = data;
@@ -55,27 +65,61 @@ const createStore = () => {
         async setData(state,id){
             state.commit("setData", "");
             //console.log("id - "+id);
-            
-            await axios.get("https://youtube.googleapis.com/youtube/v3/commentThreads?part=id%2Creplies%2Csnippet&order=relevance&allThreadsRelatedToChannelId="+id+"&key="+state.state.key)
+            let url= "https://youtube.googleapis.com/youtube/v3/commentThreads?part=id%2Creplies%2Csnippet&order=relevance&allThreadsRelatedToChannelId="+id+"&key="+state.state.key
+            await axios.get(url)
             .then(response => {
                 let data = response.data;
                 if(data.items){
                     state.commit("setData", data.items)
-                    //console.log(data.items)
+                    state.state.lastrequest.url= url
+                    state.state.lastrequest.type= "commentThreads"
+                    if(data.nextPageToken)
+                        state.state.lastrequest.nextPageToken= data.nextPageToken
+                    else{
+                        state.state.lastrequest.nextPageToken= null
+                    }
                 }
             }).catch(error => {
                 console.log(error)
             });
         },
-        async setDataWithTerm(state,payload){
+        async setDataWithTerm_Channel(state,payload){
             state.commit("setData", "");
-            //console.log("id - "+id);
-            await axios.get("https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&allThreadsRelatedToChannelId="+payload.id+"&searchTerms="+payload.term+"&key="+state.state.key)
+            
+            let url="https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&allThreadsRelatedToChannelId="+payload.id+"&searchTerms="+payload.term+"&key="+state.state.key
+            await axios.get(url)
             .then(response => {
                 let data = response.data;
                 if(data.items){
                     state.commit("setData", data.items)
-                    //console.log(data.items)
+                    state.state.lastrequest.url= url
+                    state.state.lastrequest.type= "commentThreads"
+                    if(data.nextPageToken)
+                        state.state.lastrequest.nextPageToken= data.nextPageToken
+                    else{
+                        state.state.lastrequest.nextPageToken= null
+                    }
+                }
+            }).catch(error => {
+                console.log(error)
+            });
+        },
+        async setDataWithTerm_Video(state,payload){
+            state.commit("setData", "");
+            
+            let url="https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId="+payload.id+"&searchTerms="+payload.term+"&key="+state.state.key
+            await axios.get(url)
+            .then(response => {
+                let data = response.data;
+                if(data.items){
+                    state.commit("setData", data.items)
+                    state.state.lastrequest.url= url
+                    state.state.lastrequest.type= "commentThreads"
+                    if(data.nextPageToken)
+                        state.state.lastrequest.nextPageToken= data.nextPageToken
+                    else{
+                        state.state.lastrequest.nextPageToken= null
+                    }
                 }
             }).catch(error => {
                 console.log(error)
@@ -83,13 +127,19 @@ const createStore = () => {
         },
         async setDataWithVideoId(state,id){
             state.commit("setData", "");
-            //console.log("id - "+id);
-            await axios.get("https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&order=relevance&videoId="+id+"&key="+state.state.key)
+            let url= "https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet&order=relevance&videoId="+id+"&key="+state.state.key
+            await axios.get(url)
             .then(response => {
                 let data = response.data;
                 if(data.items){
                     state.commit("setData", data.items)
-                    //console.log(data.items)
+                    state.state.lastrequest.url= url
+                    state.state.lastrequest.type= "commentThreads"
+                    if(data.nextPageToken)
+                        state.state.lastrequest.nextPageToken= data.nextPageToken
+                    else{
+                        state.state.lastrequest.nextPageToken= null
+                    }
                 }
             }).catch(error => {
                 console.log(error)
@@ -148,6 +198,28 @@ const createStore = () => {
                 console.log(error)
             });
         },
+        async LoadMore(state){
+            if(state.state.lastrequest.type=="commentThreads"){
+                //console.log("id - "+id);
+                let url=  state.state.lastrequest.url
+                await axios.get(url+"&pageToken="+state.state.lastrequest.nextPageToken)
+                .then(response => {
+                    let data = response.data;
+                    if(data.items){
+                        state.commit("addData", data.items)
+                        if(data.nextPageToken)
+                            state.state.lastrequest.nextPageToken= data.nextPageToken
+                        else{
+                            state.state.lastrequest.nextPageToken= null
+                        }
+                    }
+                }).catch(error => {
+                    console.log(error)
+                });
+           }
+        }
+
+
     },
     getters:{
         getData(state){

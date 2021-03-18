@@ -37,7 +37,7 @@
                       </v-btn>
                       
                     </template>
-                    <span>Refresh Comments</span>
+                    <span>refresh Comments</span>
                   </v-tooltip>
                     <div
                         v-else
@@ -68,7 +68,7 @@
                       </v-btn>
                     </template>
                     
-                    <span>Search comments</span>
+                    <span>search comments</span>
                   </v-tooltip>
 
                   <v-tooltip top>

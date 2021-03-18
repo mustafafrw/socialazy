@@ -2,6 +2,8 @@
     <div>
       <VideoInformation 
           :data="videoinfo"
+          :search="false"
+          :comments_video="true"
       />
       <ListComments
           :data="comment"

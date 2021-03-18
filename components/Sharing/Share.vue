@@ -10,7 +10,7 @@
             <v-toolbar
               dark
             >Share this comment</v-toolbar>
-            <v-card-text class="pa-3">
+            <v-card-text class="pa-3 text-center">
                 <ShareNetwork
                     v-for="network in networks"
                     :network="network.network"
@@ -93,8 +93,8 @@ export default {
         title: '',
         description: '',
         quote: '',
-        hashtags: 'socialazy',
-        twitterUser: ''
+        hashtags: '',
+        twitterUser: 'socialazyeu'
       },
       networks: [
         { network: 'facebook', name: 'Facebook', icon: 'facebook', color: '#1877f2' },
@@ -139,7 +139,7 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
     .v-card__text a{
         color: transparent
     }
