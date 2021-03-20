@@ -11,6 +11,7 @@ const createStore = () => {
         videoinfo: null,
         searchresult: null,
         searchdialog: false,
+        nearresult: null,
         key: "AIzaSyDhuIGeH4xmjvncDrgIFsbxGlGfFkCj3uY",
         snackbar:{
             show:false,
@@ -36,6 +37,14 @@ const createStore = () => {
         },
         setSearchResult(state,data){
             state.searchresult = data;
+        },
+        setNearResult(state,data){
+            state.nearresult = data;
+        },
+        addNearResult(state,data){
+            data.forEach(element => {
+                state.nearresult.push(element)
+            });
         },
         setSearchDialog(state){
             state.searchdialog = !state.searchdialog
@@ -197,9 +206,29 @@ const createStore = () => {
                 console.log(error)
             });
         },
+        async setNearResult(state,payload){
+            state.commit("setNearResult", "");
+            let url="https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&location="+payload.lat+"%2C"+payload.lon+"&locationRadius="+payload.radius+"km&order=viewCount&type=video&key="+state.state.key
+            await axios.get(url)
+            .then(response => {
+                let data = response.data;
+                if(data.items){
+                   
+                    state.commit("setNearResult", data.items)
+                    state.state.lastrequest.url= url
+                    state.state.lastrequest.type= "searchListResponse"
+                    if(data.nextPageToken)
+                        state.state.lastrequest.nextPageToken= data.nextPageToken
+                    else{
+                        state.state.lastrequest.nextPageToken= null
+                    }
+                }
+            }).catch(error => {
+                console.log(error)
+            });
+        },
         async LoadMore(state){
             if(state.state.lastrequest.type=="commentThreads"){
-                //console.log("id - "+id);
                 let url=  state.state.lastrequest.url
                 await axios.get(url+"&pageToken="+state.state.lastrequest.nextPageToken)
                 .then(response => {
@@ -215,10 +244,25 @@ const createStore = () => {
                 }).catch(error => {
                     console.log(error)
                 });
-           }
-        }
-
-
+            }
+            else if(state.state.lastrequest.type=="searchListResponse"){
+                let url=  state.state.lastrequest.url
+                await axios.get(url+"&pageToken="+state.state.lastrequest.nextPageToken)
+                .then(response => {
+                    let data = response.data;
+                    if(data.items){
+                        state.commit("addNearResult", data.items)
+                        if(data.nextPageToken)
+                            state.state.lastrequest.nextPageToken= data.nextPageToken
+                        else{
+                            state.state.lastrequest.nextPageToken= null
+                        }
+                    }
+                }).catch(error => {
+                    console.log(error)
+                });
+            }
+        },
     },
     getters:{
         getData(state){

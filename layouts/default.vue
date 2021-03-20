@@ -8,20 +8,33 @@
       app
     >
       <v-list>
-        <v-list-item
+        <div
           v-for="(item, i) in items"
-          :key="i"
-          :to="item.to"
-          router
-          exact
         >
-          <v-list-item-action>
-            <v-icon>{{ item.icon }}</v-icon>
-          </v-list-item-action>
-          <v-list-item-content>
-            <v-list-item-title v-text="item.title" />
-          </v-list-item-content>
-        </v-list-item>
+          <v-tooltip 
+            right
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-list-item
+                
+                :key="i"
+                :to="item.to"
+                v-bind="attrs"
+                v-on="on"
+                router
+                exact
+              >
+                <v-list-item-action>
+                  <v-icon>{{ item.icon }}</v-icon>
+                </v-list-item-action>
+                <v-list-item-content>
+                  <v-list-item-title v-text="item.title" />
+                </v-list-item-content>
+              </v-list-item>
+          </template>   
+        <span>{{item.title}}</span>
+        </v-tooltip>
+       </div>
       </v-list>
     </v-navigation-drawer>
     <v-app-bar
@@ -70,6 +83,11 @@ export default {
           icon: 'mdi-magnify',
           title: 'Search',
           to: '/'
+        },
+        {
+          icon: 'mdi-map-marker',
+          title: 'Videos Near Me',
+          to: '/nearme'
         },
         {
           icon: 'mdi-information-outline',
