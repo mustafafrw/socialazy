@@ -195,29 +195,33 @@ export default {
       increment () {
         this.km++
       },
-      async searchvideos () {
+      payload(){
+        return {
+            lat: this.lat,
+            lon: this.lon,
+            radius: this.km
+        }
+      },
+      searchvideos () {
           if(this.getLocation()){
-              let payload= {
-                  lat: this.lat,
-                  lon: this.lon,
-                  radius: this.km
-              }
-              await this.$store.dispatch('setNearResult',payload);
+             this.dispatchresults()
           }
       },
-      getLocation(){
+      async getLocation(){
           if(this.lat==null || this.lon==null){
               navigator.geolocation.getCurrentPosition(position => {
                 console.log('position: ',position)
                 this.lat = position.coords.latitude;
                 this.lon = position.coords.longitude;
-                return true
+                this.dispatchresults()
               })
           }
           else{
               return true
           }
-          
+      },
+      async dispatchresults(){
+         await this.$store.dispatch('setNearResult',this.payload());
       }
     },
     head () {
