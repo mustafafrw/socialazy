@@ -208,7 +208,7 @@ const createStore = () => {
         },
         async setNearResult(state,payload){
             state.commit("setNearResult", "");
-            let url="https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&location="+payload.lat+"%2C"+payload.lon+"&locationRadius="+payload.radius+"km&order=viewCount&type=video&key="+state.state.key
+            let url="https://youtube.googleapis.com/youtube/v3/search?part=snippet&maxResults=10&location="+payload.lat+"%2C"+payload.lon+"&locationRadius="+payload.radius+"km&order=viewCount&type=video&order="+payload.order+"&key="+state.state.key
             await axios.get(url)
             .then(response => {
                 let data = response.data;

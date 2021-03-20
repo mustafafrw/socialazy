@@ -83,9 +83,22 @@
                     </v-icon>
                     </template>
                 </v-slider>
+                
                 </v-card-text>
+             
             </v-card>
-
+            <v-row class="ma-0 pa-0">
+                  <v-col cols="7" ></v-col>
+                  <v-col cols="5" class="text-right mb-0 pb-0 mt-1 pt-0">
+                  <v-select 
+                    v-model="select"
+                    :items="items"
+                    item-text="state"
+                    item-value="abbr"
+                    label="Order"
+                  ></v-select>
+                  </v-col>
+            </v-row>
             <v-list three-line v-if="resultnear">
               <template v-for="(item, index) in resultnear">
               <v-divider
@@ -175,6 +188,13 @@ export default {
       isPlaying: false,
       lat: null,
       lon: null,
+      select: { state: 'Relevance',abbr:"relevance"  },
+      items: [
+        { state: 'Relevance',abbr:"relevance" },
+        { state: 'View Count',abbr:"viewCount" },
+        { state: 'Date',abbr:"date" },
+        { state: 'Rating',abbr:"rating" }
+      ],
     }),
     components:{
       LoadMore
@@ -199,7 +219,8 @@ export default {
         return {
             lat: this.lat,
             lon: this.lon,
-            radius: this.km
+            radius: this.km,
+            order: this.select.abbr == null ? this.select : this.select.abbr
         }
       },
       searchvideos () {
@@ -210,7 +231,6 @@ export default {
       async getLocation(){
           if(this.lat==null || this.lon==null){
               navigator.geolocation.getCurrentPosition(position => {
-                console.log('position: ',position)
                 this.lat = position.coords.latitude;
                 this.lon = position.coords.longitude;
                 this.dispatchresults()
