@@ -205,9 +205,13 @@ export default {
       },
       resultnear(){
         return this.$store.state.nearresult
-      },
+      }
     },
-
+    watch:{
+      select(){
+        this.searchvideos()
+      }
+    },
     methods: {
       decrement () {
         this.km--
