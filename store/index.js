@@ -179,6 +179,18 @@ const createStore = () => {
                 console.log(error)
             });
         },
+        async setLocalizedList(state,regioncode){
+            state.commit("setSearchResult", "");
+            await axios.get("https://youtube.googleapis.com/youtube/v3/videos?part=snippet&chart=mostPopular&maxResults=20&regionCode="+regioncode+"&key="+state.state.key)
+            .then(response => {
+                let data = response.data;
+                if(data.items){
+                    state.commit("setSearchResult", data.items)
+                }
+            }).catch(error => {
+                console.log(error)
+            });
+        },
         async setVideoInfo(state,id){
             state.commit("setVideoInfo", "");
             await axios.get("https://youtube.googleapis.com/youtube/v3/videos?part=snippet%2Cstatistics&id="+id+"&key="+state.state.key)

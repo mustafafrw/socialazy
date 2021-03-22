@@ -16,63 +16,31 @@
         </v-card-text>
       </v-card>
        <v-tabs>
-          <v-tab @click="channelsClicked()">Channels</v-tab>  
-           <v-tab @click="videoClicked()">Videos</v-tab>
+           <v-tab @click="videoClicked()">{{ type == 'popular' ? 'Popular Videos':'Videos' }}</v-tab>
+           <v-tab 
+              v-if="type!='popular'"
+              @click="channelsClicked()"
+           >Channels</v-tab> 
         </v-tabs>
-
-        <v-list three-line v-if="data && channels">
-              
-              <template v-for="(item, index) in data">
-              <v-divider
-                v-if="index>0"
-                inset
-              ></v-divider>
-                <v-list-item
-                  :key="index"
-                  @click="clickedResult(item.snippet.channelId)"
-                >
-                  <v-list-item-avatar>
-                    <v-img :src="item.snippet.thumbnails.default.url"></v-img>
-                  </v-list-item-avatar>
-
-                  <v-list-item-content>
-                    <v-list-item-title v-html="item.snippet.title"></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-               </template>
-          </v-list>
-
-          <v-list three-line v-if="data && !channels">
-              <template v-for="(item, index) in data">
-              <v-divider
-                v-if="index>0"
-                inset
-              ></v-divider>
-                <v-list-item
-                  :key="index"
-                  @click="clickedResult(item.id.videoId)"
-                >
-                  <v-list-item-avatar>
-                    <v-img :src="item.snippet.thumbnails.default.url"></v-img>
-                  </v-list-item-avatar>
-
-                  <v-list-item-content>
-                    <v-list-item-title v-html="item.snippet.title"></v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-               </template>
-          </v-list>
+        <SearchResults
+            :data="data"
+            :type="type"
+        />
     </v-col>
   </v-row>
 </template>
 
 <script>
+import SearchResults from "@/components/Search/SearchResults"
 
 export default {
   data: () => ({
       q: null,
-      channels: true
+      type: 'popular'
   }),
+  components:{
+    SearchResults
+  },
   computed: {
       data () {
         if(this.$store.state.searchresult){
@@ -82,31 +50,36 @@ export default {
   },
   methods:{
     async search(){
+      if(this.type==='popular'){
+        this.type='video'
+      }
       if(this.q==null){
         return
       }
       let payload= {
-        type: this.channels ? "channel":"video",
+        type: this.type,
         query: this.q
       }
       this.$store.dispatch('setSearchResult',payload)
     },
-    clickedResult(id){
-      if(this.channels){
-        this.$router.push('channel/'+id)
-      }
-      else{
-        this.$router.push('comment/'+id)
-      }
-    },
     videoClicked(){
-      this.channels=false
+      this.type='video'
       this.search()
     },
     channelsClicked(){
-      this.channels=true
+      this.type='channel'
       this.search()
+    },
+    async popularVideosByCountry(code){
+      await this.$store.dispatch('setLocalizedList',code)
     }
+  },
+  mounted(){
+    this.$axios.get('https://freegeoip.app/json/').then(response => {
+          let code = response.data.country_code
+          this.popularVideosByCountry(code)
+    })
+    
   }
 }
 </script>
