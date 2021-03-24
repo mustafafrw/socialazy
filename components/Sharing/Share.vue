@@ -16,7 +16,7 @@
                     :network="network.network"
                     :key="network.network"
                     :url="share_url"
-                    :title="sharing.title"
+                    :title="videoinfo"
                     :description="sharing.description"
                     :quote="sharing.quote"
                     :hashtags="sharing.hashtags"
@@ -116,6 +116,18 @@ export default {
   computed:{
     share_url(){
       return this.$store.state.site+"/comment/"+this.video_id+"/"+this.comment_id
+    },
+    videoinfo(){
+       if(this.video_id){
+          let videoinfo = this.$store.state.videoinfo;
+          if(videoinfo){
+              let info = videoinfo[0];
+              return info.snippet.title
+          }
+          else{
+            return "";
+          }
+      }
     }
   },
   methods: {
@@ -134,6 +146,7 @@ export default {
           alert('Oops, unable to copy');
         }
     },
+    
   }
 
 }
