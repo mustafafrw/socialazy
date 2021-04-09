@@ -149,7 +149,7 @@ export default {
             const found_time = url.match(regex);
             if(found_time){
               this.showicon= true
-              this.marktime = found_time[0].replace("\"","")
+              this.marktime = found_time[0].replace("\"","").replace("t=","")
             }
           }
           else{

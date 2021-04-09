@@ -43,22 +43,23 @@ export default {
             let hour = 0
 
             
-            const regex = new RegExp('t=(.*?)?h?(.*?)?m?(.*?)s','g')
-            let matches = regex.exec(time)
-            if(matches){
-                matches.forEach((element,index) => {
-                    if(element=='m'){
-                        minute = parseInt(matches[index-1])
-                    }
-                    else if(element=='h'){
-                        hour = parseInt(matches[index-1])
-                    }
-                    if(index==matches.length-1){
-                        second = parseInt(matches[index])
-                    }
-                });
+            //const regex = new RegExp('t=(.*?)?[^a-z](.*?)?[^a-z](.*?)s','g')
+            //const regex = new RegExp('/(\d+h)?(\d+m)?(\d+s)/')
+            
+            if(time.includes('h')){
+                hour = time.split('h')[0]
             }
+            if(time.includes('m')){
+                minute = time.split('m')[0].replace(hour+('h'),"")
+            }
+            second = time.split('s')[0].replace(hour+('h'),"").replace(minute+('m'),"")
+            hour = parseInt(hour)
+            minute = parseInt(minute)
+            second = parseInt(second)
             this.timeinseconds = (hour*60*60)+(minute*60)+second
+        },
+        getHour(){
+
         }
     },
     mounted(){
