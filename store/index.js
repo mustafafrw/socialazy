@@ -89,7 +89,7 @@ const createStore = () => {
                     }
                 }
             }).catch(error => {
-                console.log(error)
+                // console.log(error)
             });
         },
         async setDataWithTerm_Channel(state,payload){
@@ -209,14 +209,14 @@ const createStore = () => {
             await axios.get("https://youtube.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&id="+id+"&key="+state.state.key)
             .then(response => {
                 let data = response.data;
-                if(data.items){
+                if(data.items.length>0){
                     state.commit("setData", data.items)
                     if(data.items[0].replies){
                         state.commit("setReplies", data.items[0].replies.comments)
                     }
                 }
             }).catch(error => {
-                console.log(error)
+                // console.log(error)
             });
         },
         async setNearResult(state,payload){
@@ -237,7 +237,7 @@ const createStore = () => {
                     }
                 }
             }).catch(error => {
-                console.log(error)
+                // console.log(error)
             });
         },
         async LoadMore(state){
@@ -255,7 +255,7 @@ const createStore = () => {
                         }
                     }
                 }).catch(error => {
-                    console.log(error)
+                    // console.log(error)
                 });
             }
             else if(state.state.lastrequest.type=="searchListResponse"){

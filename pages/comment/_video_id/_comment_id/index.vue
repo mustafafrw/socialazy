@@ -1,17 +1,28 @@
 <template>
     <div>
-      <VideoInformation 
-          :data="videoinfo"
-          :search="false"
-          :comments_video="true"
-      />
-      <ListComments
-          :data="comment"
-      />
-      <v-divider v-if="replies"></v-divider>
-      <ListReplies
-          :data="replies"
-      />
+      <div v-if="videoInfo">
+        <VideoInformation 
+            :data="videoinfo"
+            :search="false"
+            :comments_video="true"
+        />
+        <ListComments
+            v-if="comments"
+            :data="comment"
+        />
+        <div v-if="replies">
+          <v-divider></v-divider>
+          <ListReplies
+              :data="replies"
+          />
+        </div>
+       </div>
+       <div v-else class="text-center">
+         <v-alert type="error">
+           We can't provide comments on this video right now. It might be deleted from YouTube.
+         </v-alert>
+         <v-btn to="/">Go to homepage</v-btn>
+       </div>
     </div>
 </template>
 
@@ -47,20 +58,23 @@ export default {
       },
       videoinfo () {
         let videoinfo = this.$store.state.videoinfo
-        
-        if(videoinfo){
-          let info = videoinfo[0];
-          this.title = info.snippet.title;
-          this.image = info.snippet.thumbnails.medium.url
+        try{
+          if(videoinfo){
+            let info = videoinfo[0];
+            this.title = info.snippet.title;
+            this.image = info.snippet.thumbnails.medium.url;
 
-          if(this.comment){
-            this.description = this.comment[0].snippet.topLevelComment.snippet.textOriginal
-            this.authorname = this.comment[0].snippet.topLevelComment.snippet.authorDisplayName
-            this.title = "Comment from "+this.authorname+" on YouTube - "+info.snippet.title
+            if(this.comment){
+              this.description = this.comment[0].snippet.topLevelComment.snippet.textOriginal
+              this.authorname = this.comment[0].snippet.topLevelComment.snippet.authorDisplayName
+              this.title = "Comment from "+this.authorname+" on YouTube - "+info.snippet.title
+            }
+            return info;
           }
-          return info;
+          return null
+        }catch(e) {
+          return null
         }
-        return null
       },
       url(){
         return this.$store.state.site+"/comment/"+this.$route.params.video_id+"/"+this.$route.params.comment_id

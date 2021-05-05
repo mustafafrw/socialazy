@@ -1,22 +1,30 @@
 <template>
     <div>
-        <VideoInformation 
-            :data="videoinfo"
-            :search="true"
-            :comments_video="false"
-        />
-        <ListComments
-            :data="comment"
-        />
-        <SearchTerm 
-          v-if="$store.state.searchdialog"
-          :id= "$route.params.video_id"
-          :type="'video'"
-          @close="$store.commit('setSearchDialog')"
-        />
-        <div class="text-center">
-              <LoadMore />
+      <div v-if="videoinfo">
+          <VideoInformation 
+              :data="videoinfo"
+              :search="true"
+              :comments_video="false"
+          />
+          <ListComments
+              :data="comment"
+          />
+          <SearchTerm 
+            v-if="$store.state.searchdialog"
+            :id= "$route.params.video_id"
+            :type="'video'"
+            @close="$store.commit('setSearchDialog')"
+          />
+          <div class="text-center">
+                <LoadMore />
+          </div>
         </div>
+        <div v-else class="text-center">
+         <v-alert type="error">
+           We can't provide comments on this video right now. It might be deleted from YouTube.
+         </v-alert>
+         <v-btn to="/">Go to homepage</v-btn>
+       </div>
     </div>
 </template>
 
@@ -51,19 +59,24 @@ export default {
         return this.$store.state.data
       },
       videoinfo () {
-        let videoinfo = this.$store.state.videoinfo
-        
-        if(videoinfo){
-          let info = videoinfo[0];
-          this.title = info.snippet.title+this.titleEnd;
-          this.image = info.snippet.thumbnails.medium.url
+        try{
+          let videoinfo = this.$store.state.videoinfo
+          
+          if(videoinfo){
+            let info = videoinfo[0];
+            this.title = info.snippet.title+this.titleEnd;
+            this.image = info.snippet.thumbnails.medium.url
 
-          if(this.comment){
-            this.description = this.desc+this.title
+            if(this.comment){
+              this.description = this.desc+this.title
+            }
+            return info;
           }
-          return info;
+          return null
         }
-        return null
+        catch(e) {
+          return null
+        }
       },
       url(){
         return this.$store.state.site+"/comment/"+this.$route.params.video_id
