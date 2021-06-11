@@ -1,13 +1,12 @@
 <template>
     <div>
-      <div v-if="videoInfo">
         <VideoInformation 
             :data="videoinfo"
             :search="false"
             :comments_video="true"
         />
         <ListComments
-            v-if="comments"
+            v-if="comment"
             :data="comment"
         />
         <div v-if="replies">
@@ -16,13 +15,6 @@
               :data="replies"
           />
         </div>
-       </div>
-       <div v-else class="text-center">
-         <v-alert type="error">
-           We can't provide comments on this video right now. It might be deleted from YouTube.
-         </v-alert>
-         <v-btn to="/">Go to homepage</v-btn>
-       </div>
     </div>
 </template>
 
@@ -45,9 +37,13 @@ export default {
         ListReplies,
         ListComments
     },
-    async asyncData ({ store, params }) {
-        await store.dispatch('setVideoInfo',params.video_id);
-        await store.dispatch('setReplies',params.comment_id);
+    // async asyncData ({ store, params }) {
+    //     await store.dispatch('setVideoInfo',params.video_id);
+    //     await store.dispatch('setReplies',params.comment_id);
+    // },
+    async fetch(){
+        await this.$store.dispatch('setVideoInfo',this.$route.params.video_id);
+        await this.$store.dispatch('setReplies',this.$route.params.comment_id);
     },
     computed: {
       replies () {

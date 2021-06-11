@@ -10,9 +10,9 @@
               :key="index"
               inset
               ></v-divider>
-              <Comment
-                :item="item"
-              />
+                <Comment
+                  :item="item"
+                />
           </template>
         
       </v-list>

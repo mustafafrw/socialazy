@@ -1,30 +1,22 @@
 <template>
     <div>
-      <div v-if="videoinfo">
-          <VideoInformation 
-              :data="videoinfo"
-              :search="true"
-              :comments_video="false"
-          />
-          <ListComments
-              :data="comment"
-          />
-          <SearchTerm 
-            v-if="$store.state.searchdialog"
-            :id= "$route.params.video_id"
-            :type="'video'"
-            @close="$store.commit('setSearchDialog')"
-          />
-          <div class="text-center">
-                <LoadMore />
-          </div>
+        <VideoInformation 
+            :data="videoinfo"
+            :search="true"
+            :comments_video="false"
+        />
+        <ListComments
+            :data="comment"
+        />
+        <SearchTerm 
+          v-if="$store.state.searchdialog"
+          :id= "$route.params.video_id"
+          :type="'video'"
+          @close="$store.commit('setSearchDialog')"
+        />
+        <div class="text-center">
+              <LoadMore />
         </div>
-        <div v-else class="text-center">
-         <v-alert type="error">
-           We can't provide comments on this video right now. It might be deleted from YouTube.
-         </v-alert>
-         <v-btn to="/">Go to homepage</v-btn>
-       </div>
     </div>
 </template>
 
