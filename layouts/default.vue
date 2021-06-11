@@ -51,7 +51,7 @@
 
     </v-app-bar>
     <v-main>
-      <v-container>
+      <v-container style="max-width: 1280px">
         <nuxt />
       </v-container>
     </v-main>
